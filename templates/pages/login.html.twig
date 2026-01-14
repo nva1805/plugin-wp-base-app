@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Login - {{ get_bloginfo('name') }}{% endblock %}
+
+{% block content %}
+	<div class="login-page">
+		<div class="login-container">
+			<h1>Login to {{ get_bloginfo('name') }}</h1>
+
+			{% if error %}
+				<div class="error">{{ error|striptags }}</div>
+			{% endif %}
+
+			<form method="POST" action="">
+				<input type="hidden" name="login_nonce" value="{{ login_nonce }}">
+				<input type="hidden" name="destination" value="{{ destination }}">
+
+				<div class="form-group">
+					<label for="username">Username or Email</label>
+					<input type="text" id="username" name="username" required autofocus>
+				</div>
+
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" required>
+				</div>
+
+				<div class="remember-me">
+					<input type="checkbox" id="remember" name="remember" value="1">
+					<label for="remember" style="margin-bottom: 0; font-weight: normal;">Remember Me</label>
+				</div>
+
+				<button type="submit">Login</button>
+			</form>
+
+			<div class="links">
+				<a href="{{ lost_password_url }}">Lost your password?</a>
+				|
+				<a href="{{ register_url }}">Register</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

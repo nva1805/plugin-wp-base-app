@@ -1,0 +1,26 @@
+<header class="site-header">
+	<div class="container">
+		<div class="header-content">
+			<div class="logo">
+				<a href="{{ home_url('/') }}">
+					<h1>{{ get_bloginfo("name") }}</h1>
+				</a>
+			</div>
+
+			<nav class="main-nav">
+				<ul>
+					<li><a href="{{ home_url('/') }}">Home</a></li>
+					{% if is_user_logged_in() %}
+					<li><a href="{{ home_url('/profile') }}">Profile</a></li>
+					<li>
+						<a href="{{ wp_logout_url(home_url('/')) }}">Logout</a>
+					</li>
+					{% else %}
+					<li><a href="{{ home_url('/login') }}">Login</a></li>
+					<li><a href="{{ home_url('/register') }}">Register</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</header>

@@ -1,0 +1,77 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Register - {{ get_bloginfo('name') }}{% endblock %}
+
+{% block head %}
+	<style>
+		.form-group {
+			position: relative;
+		}
+		.field-error {
+			color: #dc3545;
+			font-size: 12px;
+			margin-top: 5px;
+			display: block;
+		}
+		.input-error {
+			border-color: #dc3545 !important;
+			box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+		}
+		.password-strength {
+			font-size: 12px;
+			margin-top: 5px;
+			font-weight: 500;
+		}
+		.strength-weak { color: #dc3545; }
+		.strength-fair { color: #fd7e14; }
+		.strength-good { color: #20c997; }
+		.strength-strong { color: #28a745; }
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="register-page">
+		<div class="register-container">
+			<h1>Create an Account</h1>
+
+			{% if error %}
+				<div class="error">{{ error|striptags }}</div>
+			{% endif %}
+
+			{% if success %}
+				<div class="success">{{ success }}</div>
+			{% endif %}
+
+			<form method="POST" action="">
+				<input type="hidden" name="register_nonce" value="{{ register_nonce }}">
+
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="text" id="username" name="username" value="{{ username|default('') }}" required autofocus>
+				</div>
+
+				<div class="form-group">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" value="{{ email|default('') }}" required>
+				</div>
+
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" required>
+				</div>
+
+				<div class="form-group">
+					<label for="password_confirm">Confirm Password</label>
+					<input type="password" id="password_confirm" name="password_confirm" required>
+				</div>
+
+				<button type="submit">Register</button>
+			</form>
+
+			<div class="links">
+				<span>Already have an account?</span>
+				<a href="{{ login_url }}">Login</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

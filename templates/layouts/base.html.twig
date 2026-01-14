@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}
+				{{ get_bloginfo('name') }}
+			{% endblock %}
+		</title>
+		{% block head %}{% endblock %}
+		{{ wp_head()|raw }}
+	</head>
+	<body {% block body_class %} {% endblock %}>
+		{{ wp_body_open()|raw }}
+
+		{% block header %}
+			{% include 'partials/header.html.twig' %}
+		{% endblock %}
+
+		<main>
+			{% block content %}{% endblock %}
+		</main>
+
+		{% block footer %}
+			{% include 'partials/footer.html.twig' %}
+		{% endblock %}
+
+		{{ wp_footer()|raw }}
+	</body>
+</html>
