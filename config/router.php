@@ -1,9 +1,9 @@
 <?php
 
 return [
-  'logina' => [
+  'login' => [
     'title' => 'Login',
-    'slug' => 'logina',
+    'slug' => 'login',
     'template' => '/pages/login.html.twig',
     'controller' => '\WPBaseApp\Controllers\Auth\LoginController',
   ],
@@ -11,7 +11,7 @@ return [
     'title' => 'Register',
     'slug' => 'register',
     'template' => '/pages/register.html.twig',
-    'controller' => '\WPBaseApp\Controllers\Auth\RegistenController',
+    'controller' => '\WPBaseApp\Controllers\Auth\RegisterController',
   ],
   'profile' => [
     'title' => 'Profile',

@@ -18,7 +18,7 @@ class ProfileController extends BaseController
     parent::__construct($template, $data);
   }
 
-  public function index()
+  public function index(): void
   {
     // Có thể thêm logic xử lý ở đây nếu cần
   }

@@ -1,11 +1,33 @@
 <?php
+
 namespace WPBaseApp\Assets;
 
+/**
+ * Asset Loader - Handles registration and enqueueing of plugin assets
+ */
 class AssetLoader
 {
+  private const TYPE_STYLE = 'css';
+  private const TYPE_SCRIPT = 'js';
+
   private string $basePath;
   private string $baseUrl;
   private string $prefix;
+
+  /**
+   * Script dependencies configuration
+   * Format: 'filename.js' => ['dependency1', 'dependency2']
+   */
+  private array $scriptDependencies = [
+    'register.js' => ['jquery'],
+    'login.js' => ['jquery'],
+  ];
+
+  /**
+   * Style dependencies configuration
+   * Format: 'filename.css' => ['dependency1', 'dependency2']
+   */
+  private array $styleDependencies = [];
 
   public function __construct(string $basePath, string $baseUrl, string $prefix = 'wp-base-app')
   {
@@ -19,111 +41,63 @@ class AssetLoader
    */
   public function register(): void
   {
-    $this->enqueueStyles();
-    $this->enqueueScripts();
+    $this->enqueueAssets(self::TYPE_STYLE);
+    $this->enqueueAssets(self::TYPE_SCRIPT);
   }
 
   /**
-   * Enqueue all CSS files
+   * Enqueue assets by type
    */
-  private function enqueueStyles(): void
+  private function enqueueAssets(string $type): void
   {
-    $files = $this->getFiles('css', '*.css');
+    $files = $this->getFiles($type);
 
-    foreach ($files as $file) {
-      $handle = $this->generateHandle($file, 'css');
-      
-      wp_enqueue_style(
-        $handle,
-        $this->getFileUrl('css', $file),
-        $this->getStyleDependencies($file),
-        $this->getFileVersion($file)
-      );
+    foreach ($files as $filename) {
+      $url = $this->buildAssetUrl($type, $filename);
+      $dependencies = $this->getDependencies($type, $filename);
+      if ($type === self::TYPE_STYLE) {
+        wp_enqueue_style($$this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION);
+      } else {
+        wp_enqueue_script($$this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION, true);
+      }
     }
   }
 
   /**
-   * Enqueue all JS files
+   * Get all files from asset directory
    */
-  private function enqueueScripts(): void
+  private function getFiles(string $type): array
   {
-    $files = $this->getFiles('js', '*.js');
-
-    foreach ($files as $file) {
-      $handle = $this->generateHandle($file, 'js');
-      
-      wp_enqueue_script(
-        $handle,
-        $this->getFileUrl('js', $file),
-        $this->getScriptDependencies($file),
-        $this->getFileVersion($file),
-        true
-      );
-    }
-  }
-
-  /**
-   * Get files from directory
-   */
-  private function getFiles(string $directory, string $pattern): array
-  {
-    $path = "{$this->basePath}/assets/{$directory}/{$pattern}";
-    $files = glob($path) ?: [];
-
+    $pattern = $this->buildAssetPath($type, "*.{$type}");
+    $files = glob($pattern) ?: [];
     return array_map('basename', $files);
   }
 
   /**
-   * Generate handle for asset
+   * Build asset directory path
    */
-  private function generateHandle(string $filename, string $type): string
+  private function buildAssetPath(string $type, string $filename): string
   {
-    $name = pathinfo($filename, PATHINFO_FILENAME);
-    return "{$this->prefix}-{$name}";
+    return "{$this->basePath}/assets/{$type}/{$filename}";
   }
 
   /**
-   * Get file URL
+   * Build asset URL
    */
-  private function getFileUrl(string $directory, string $filename): string
+  private function buildAssetUrl(string $type, string $filename): string
   {
-    return "{$this->baseUrl}/assets/{$directory}/{$filename}";
+    return "{$this->baseUrl}/assets/{$type}/{$filename}";
   }
 
   /**
-   * Get file version based on modification time
+   * Get dependencies for an asset
    */
-  private function getFileVersion(string $filename): string
+  private function getDependencies(string $type, string $filename): array
   {
-    $directory = pathinfo($filename, PATHINFO_EXTENSION) === 'css' ? 'css' : 'js';
-    $filePath = "{$this->basePath}/assets/{$directory}/{$filename}";
+    $config = $type === self::TYPE_STYLE
+      ? $this->styleDependencies
+      : $this->scriptDependencies;
 
-    return file_exists($filePath) ? (string) filemtime($filePath) : '1.0.0';
-  }
-
-  /**
-   * Get style dependencies
-   */
-  private function getStyleDependencies(string $filename): array
-  {
-    // Add dependencies based on filename if needed
-    return [];
-  }
-
-  /**
-   * Get script dependencies
-   */
-  private function getScriptDependencies(string $filename): array
-  {
-    $dependencies = [];
-
-    // Add jQuery dependency for specific files
-    $jqueryFiles = ['register.js', 'login.js'];
-    
-    if (in_array($filename, $jqueryFiles)) {
-      $dependencies[] = 'jquery';
-    }
-
-    return $dependencies;
+    return $config[$filename] ?? [];
   }
 }
