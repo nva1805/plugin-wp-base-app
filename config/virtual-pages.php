@@ -6,12 +6,14 @@ return [
     'slug' => 'login',
     'template' => '/pages/login.html.twig',
     'controller' => '\WPBaseApp\Controllers\Auth\LoginController',
+    'preventRedirect' => true,
   ],
   'register' => [
     'title' => 'Register',
     'slug' => 'register',
     'template' => '/pages/register.html.twig',
     'controller' => '\WPBaseApp\Controllers\Auth\RegisterController',
+    'preventRedirect' => true,
   ],
   'profile' => [
     'title' => 'Profile',

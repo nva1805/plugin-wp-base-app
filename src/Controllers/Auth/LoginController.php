@@ -2,6 +2,7 @@
 namespace WPBaseApp\Controllers\Auth;
 
 use WPBaseApp\Controllers\BaseController;
+use WPBaseApp\Services\AuthService;
 
 class LoginController extends BaseController
 {
@@ -12,8 +13,7 @@ class LoginController extends BaseController
 
   public function index(): void
   {
-    $this->redirectIfAuthenticated();
-
+    AuthService::redirectIfAuthenticated('/');
     if ($this->request->isMethod('POST')) {
       $this->handleLogin();
     }

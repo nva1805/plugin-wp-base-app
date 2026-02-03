@@ -38,6 +38,7 @@ function run_wp_base_app()
 }
 
 add_action('plugins_loaded', 'run_wp_base_app', 10);
+
 register_activation_hook(__FILE__, 'flush_rewrite_rules');
 register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
 

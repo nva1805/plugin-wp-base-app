@@ -2,6 +2,7 @@
 namespace WPBaseApp\Controllers\Auth;
 
 use WPBaseApp\Controllers\BaseController;
+use WPBaseApp\Services\AuthService;
 
 class RegistenController extends BaseController
 {
@@ -12,7 +13,7 @@ class RegistenController extends BaseController
 
   public function index(): void
   {
-    $this->redirectIfAuthenticated();
+    AuthService::redirectIfAuthenticated();
 
     if ($this->request->isMethod('POST')) {
       $this->handleRegistration();
@@ -52,7 +53,7 @@ class RegistenController extends BaseController
 
     // Validate input
     $errors = $this->validate($username, $email, $password, $password_confirm);
-    
+
     if (!empty($errors)) {
       $this->mergeData([
         'error' => $errors[0],
@@ -63,7 +64,7 @@ class RegistenController extends BaseController
 
     // Create user
     $user_id = wp_create_user($username, $password, $email);
-    
+
     if (is_wp_error($user_id)) {
       $this->setData('error', $user_id->get_error_message());
       return;
