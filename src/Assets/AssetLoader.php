@@ -56,9 +56,9 @@ class AssetLoader
       $url = $this->buildAssetUrl($type, $filename);
       $dependencies = $this->getDependencies($type, $filename);
       if ($type === self::TYPE_STYLE) {
-        wp_enqueue_style($$this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION);
+        wp_enqueue_style($this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION);
       } else {
-        wp_enqueue_script($$this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION, true);
+        wp_enqueue_script($this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION, true);
       }
     }
   }
