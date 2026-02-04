@@ -1,23 +1,37 @@
-<header class="site-header">
+<header class="site-header" x-data="{ mobileMenuOpen: false }" :class="{ 'scrolled': window.scrollY > 20 }">
 	<div class="container">
 		<div class="header-content">
 			<div class="logo">
-				<a href="{{ home_url('/') }}">
+				<a href="{{ home_url('/') }}" aria-label="{{ get_bloginfo('name') }} - Home">
 					<h1>{{ get_bloginfo("name") }}</h1>
 				</a>
 			</div>
 
-			<nav class="main-nav">
+			<button class="mobile-menu-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="{ 'active': mobileMenuOpen }" aria-label="Toggle navigation menu" aria-expanded="false">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+
+			<nav class="main-nav" :class="{ 'active': mobileMenuOpen }">
 				<ul>
-					<li><a href="{{ home_url('/') }}">Home</a></li>
-					{% if is_user_logged_in() %}
-					<li><a href="{{ home_url('/profile') }}">Profile</a></li>
 					<li>
-						<a href="{{ wp_logout_url(home_url('/')) }}">Logout</a>
+						<a href="{{ home_url('/') }}">Home</a>
 					</li>
+					{% if is_user_logged_in() %}
+						<li>
+							<a href="{{ home_url('/profile') }}">Profile</a>
+						</li>
+						<li class="nav-cta">
+							<a href="{{ wp_logout_url(home_url('/')) }}">Logout</a>
+						</li>
 					{% else %}
-					<li><a href="{{ home_url('/login') }}">Login</a></li>
-					<li><a href="{{ home_url('/register') }}">Register</a></li>
+						<li>
+							<a href="{{ home_url('/login') }}">Login</a>
+						</li>
+						<li class="nav-cta">
+							<a href="{{ home_url('/register') }}">Get Started</a>
+						</li>
 					{% endif %}
 				</ul>
 			</nav>

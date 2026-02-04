@@ -1,34 +1,171 @@
-/* Footer Styles */
+/* ============================================
+   FOOTER STYLES - Modern Footer
+   ============================================ */
+
 .site-footer {
-  background: #222;
-  color: #ccc;
-  padding: 2rem 0;
   margin-top: auto;
+  background: var(--gradient-dark);
+  color: var(--color-gray-400);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative gradient overlay */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--color-primary),
+      var(--color-secondary),
+      var(--color-primary),
+      transparent);
+  opacity: 0.5;
+}
+
+/* Decorative background elements */
+.site-footer::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.site-footer .container {
+  position: relative;
+  z-index: 1;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: var(--spacing-2xl) 0;
   text-align: center;
 }
 
+/* ========== Copyright ========== */
 .footer-content p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
 }
 
+.footer-content p strong,
+.footer-content p .site-name {
+  color: var(--color-gray-300);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ========== Footer Navigation ========== */
 .footer-nav {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
 }
 
 .footer-nav a {
-  color: #ccc;
+  position: relative;
+  color: var(--color-gray-400);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
-  transition: color 0.3s;
+  padding: var(--spacing-xs) 0;
+  transition: color var(--transition-fast);
+}
+
+.footer-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
 }
 
 .footer-nav a:hover {
-  color: white;
+  color: var(--color-white);
+}
+
+.footer-nav a:hover::after {
+  width: 100%;
+}
+
+/* ========== Social Links (Optional Enhancement) ========== */
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  color: var(--color-gray-400);
+  transition: all var(--transition-fast);
+}
+
+.footer-social a:hover {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--color-white);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.footer-social a svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========== Footer Bottom Bar ========== */
+.footer-bottom {
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-600);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .footer-content {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .footer-nav {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-nav {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .footer-nav a {
+    padding: var(--spacing-sm);
+  }
 }

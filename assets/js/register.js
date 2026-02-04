@@ -1,4 +1,5 @@
 console.log("register.js loaded");
+
 const registerForm = () => ({
 	form: {
 		username: "",
@@ -12,7 +13,6 @@ const registerForm = () => ({
 		password: "",
 		password_confirm: "",
 	},
-	passwordStrength: null,
 	touched: {
 		username: false,
 		email: false,
@@ -28,34 +28,25 @@ const registerForm = () => ({
 			},
 			{
 				test: (v) => /^[a-zA-Z0-9_]+$/.test(v),
-				message:
-					"Username can only contain letters, numbers and underscores",
+				message: "Only letters, numbers and underscores",
 			},
 		],
 		email: [
 			{ test: (v) => !!v.trim(), message: "Email is required" },
 			{
 				test: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-				message: "Please enter a valid email address",
+				message: "Please enter a valid email",
 			},
 		],
 		password: [
 			{ test: (v) => !!v, message: "Password is required" },
 			{
 				test: (v) => v.length >= 8,
-				message: "Password must be at least 8 characters",
-			},
-			{
-				test: (v) => /[a-zA-Z]/.test(v),
-				message: "Password must contain at least one letter",
-			},
-			{
-				test: (v) => /\d/.test(v),
-				message: "Password must contain at least one number",
+				message: "At least 8 characters",
 			},
 		],
 		password_confirm: [
-			{ test: (v) => !!v, message: "Please confirm your password" },
+			{ test: (v) => !!v, message: "Please confirm password" },
 			{
 				test: (v, form) => v === form.password,
 				message: "Passwords do not match",
@@ -83,7 +74,6 @@ const registerForm = () => ({
 		let isValid = true;
 		for (const field of Object.keys(this.rules)) {
 			this.touched[field] = true;
-			console.log(this.validateField(field));
 			if (!this.validateField(field)) {
 				isValid = false;
 			}

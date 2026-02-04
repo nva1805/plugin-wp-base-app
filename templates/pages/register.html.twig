@@ -5,52 +5,81 @@
 {% endblock %}
 
 {% block content %}
-	<div class="register-page">
-		<div class="register-container" x-data="registerForm">
-			<h1>Create an Account</h1>
+	<div
+		class="register-page">
+		{# Left Side - Branding #}
+		<div class="register-branding">
+			<div class="branding-content">
+				<h1>Create Account</h1>
+				<p class="tagline">Join us today and get started</p>
 
-			{# Server-side error from PHP #}
-			{% if error %}
-				<div class="error">{{ error|striptags }}</div>
-			{% endif %}
+				<ul class="features">
+					<li>
+						<span class="feature-icon">✓</span>
+						<span>Free to join, no credit card required</span>
+					</li>
+					<li>
+						<span class="feature-icon">✓</span>
+						<span>Access to exclusive content</span>
+					</li>
+					<li>
+						<span class="feature-icon">✓</span>
+						<span>24/7 customer support</span>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-			{% if success %}
-				<div class="success">{{ success }}</div>
-			{% endif %}
+		{# Right Side - Form #}
+		<div class="register-form-wrapper">
+			<div class="register-container" x-data="registerForm">
+				<h2>Sign Up</h2>
 
-			<form method="POST" action="" @submit="submitForm($event)">
-				<input type="hidden" name="register_nonce" value="{{ register_nonce }}">
+				{# Server-side messages #}
+				{% if error %}
+					<div class="message error" role="alert">{{ error|striptags }}</div>
+				{% endif %}
 
-				<div class="form-group">
-					<label for="username">Username</label>
-					<input type="text" id="username" name="username" x-model="form.username" @blur="validateField('username')" @focus="clearError('username')" :class="{ 'input-error': hasError('username') }" autofocus autocomplete="off">
-					<span class="field-error" x-show="hasError('username')" x-text="errors.username"></span>
+				{% if success %}
+					<div class="message success" role="status">{{ success }}</div>
+				{% endif %}
+
+				<form method="POST" action="" @submit="submitForm($event)" novalidate>
+					<input type="hidden" name="register_nonce" value="{{ register_nonce }}">
+
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" id="username" name="username" x-model="form.username" @blur="validateField('username')" @focus="clearError('username')" :class="{ 'input-error': hasError('username') }" placeholder="Enter username" autofocus autocomplete="username">
+						<span class="field-error" x-show="hasError('username')" x-text="errors.username"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" x-model="form.email" @blur="validateField('email')" @focus="clearError('email')" :class="{ 'input-error': hasError('email') }" placeholder="you@example.com" autocomplete="email">
+						<span class="field-error" x-show="hasError('email')" x-text="errors.email"></span>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" id="password" name="password" x-model="form.password" @blur="validateField('password')" @focus="clearError('password')" :class="{ 'input-error': hasError('password') }" placeholder="••••••••" autocomplete="new-password">
+							<span class="field-error" x-show="hasError('password')" x-text="errors.password"></span>
+						</div>
+
+						<div class="form-group">
+							<label for="password_confirm">Confirm</label>
+							<input type="password" id="password_confirm" name="password_confirm" x-model="form.password_confirm" @blur="validateField('password_confirm')" @focus="clearError('password_confirm')" :class="{ 'input-error': hasError('password_confirm') }" placeholder="••••••••" autocomplete="new-password">
+							<span class="field-error" x-show="hasError('password_confirm')" x-text="errors.password_confirm"></span>
+						</div>
+					</div>
+
+					<button type="submit" class="btn-submit">Create Account</button>
+				</form>
+
+				<div class="links">
+					<span>Already have an account?</span>
+					<a href="{{ login_url }}">Sign in</a>
 				</div>
-
-				<div class="form-group">
-					<label for="email">Email Address</label>
-					<input type="text" id="email" name="email" x-model="form.email" @blur="validateField('email')" @focus="clearError('email')" :class="{ 'input-error': hasError('email') }" autocomplete="off">
-					<span class="field-error" x-show="hasError('email')" x-text="errors.email"></span>
-				</div>
-
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" id="password" name="password" x-model="form.password" @blur="validateField('password')" @focus="clearError('password')" :class="{ 'input-error': hasError('password') }" autocomplete="off">
-					<span class="field-error" x-show="hasError('password')" x-text="errors.password"></span>
-				</div>
-
-				<div class="form-group">
-					<label for="password_confirm">Confirm Password</label>
-					<input type="password" id="password_confirm" name="password_confirm" x-model="form.password_confirm" @blur="validateField('password_confirm')" @focus="clearError('password_confirm')" :class="{ 'input-error': hasError('password_confirm') }" autocomplete="off">
-					<span class="field-error" x-show="hasError('password_confirm')" x-text="errors.password_confirm"></span>
-				</div>
-
-				<button type="submit">Register</button>
-			</form>
-
-			<div class="links">
-				<span>Already have an account?</span>
-				<a href="{{ login_url }}">Login</a>
 			</div>
 		</div>
 	</div>
