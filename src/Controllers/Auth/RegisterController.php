@@ -4,7 +4,7 @@ namespace WPBaseApp\Controllers\Auth;
 use WPBaseApp\Controllers\BaseController;
 use WPBaseApp\Services\AuthService;
 
-class RegistenController extends BaseController
+class RegisterController extends BaseController
 {
   public function __construct(string $template)
   {
@@ -13,7 +13,8 @@ class RegistenController extends BaseController
 
   public function index(): void
   {
-    AuthService::redirectIfAuthenticated();
+    $authService = new AuthService();
+    $authService->redirectIfAuthenticated();
 
     if ($this->request->isMethod('POST')) {
       $this->handleRegistration();

@@ -1,183 +1,121 @@
-(function($) {
-  'use strict';
+console.log("register.js loaded");
+const registerForm = () => ({
+	form: {
+		username: "",
+		email: "",
+		password: "",
+		password_confirm: "",
+	},
+	errors: {
+		username: "",
+		email: "",
+		password: "",
+		password_confirm: "",
+	},
+	passwordStrength: null,
+	touched: {
+		username: false,
+		email: false,
+		password: false,
+		password_confirm: false,
+	},
+	rules: {
+		username: [
+			{ test: (v) => !!v.trim(), message: "Username is required" },
+			{
+				test: (v) => v.trim().length >= 3,
+				message: "Username must be at least 3 characters",
+			},
+			{
+				test: (v) => /^[a-zA-Z0-9_]+$/.test(v),
+				message:
+					"Username can only contain letters, numbers and underscores",
+			},
+		],
+		email: [
+			{ test: (v) => !!v.trim(), message: "Email is required" },
+			{
+				test: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+				message: "Please enter a valid email address",
+			},
+		],
+		password: [
+			{ test: (v) => !!v, message: "Password is required" },
+			{
+				test: (v) => v.length >= 8,
+				message: "Password must be at least 8 characters",
+			},
+			{
+				test: (v) => /[a-zA-Z]/.test(v),
+				message: "Password must contain at least one letter",
+			},
+			{
+				test: (v) => /\d/.test(v),
+				message: "Password must contain at least one number",
+			},
+		],
+		password_confirm: [
+			{ test: (v) => !!v, message: "Please confirm your password" },
+			{
+				test: (v, form) => v === form.password,
+				message: "Passwords do not match",
+			},
+		],
+	},
 
-  $(document).ready(function() {
-    const $form = $('.register-container form');
-    const $username = $('#username');
-    const $email = $('#email');
-    const $password = $('#password');
-    const $passwordConfirm = $('#password_confirm');
-    const $container = $('.register-container');
+	validateField(field) {
+		this.touched[field] = true;
+		this.errors[field] = "";
 
-    // Remove existing error on input focus
-    $form.find('input').on('focus', function() {
-      $(this).removeClass('input-error');
-      $(this).closest('.form-group').find('.field-error').remove();
-    });
+		const value = this.form[field];
+		const rules = this.rules[field] || [];
 
-    // Real-time validation
-    $username.on('blur', function() {
-      validateUsername();
-    });
+		for (const rule of rules) {
+			if (!rule.test(value, this.form)) {
+				this.errors[field] = rule.message;
+				return false;
+			}
+		}
+		return true;
+	},
 
-    $email.on('blur', function() {
-      validateEmail();
-    });
+	validateAll() {
+		let isValid = true;
+		for (const field of Object.keys(this.rules)) {
+			this.touched[field] = true;
+			console.log(this.validateField(field));
+			if (!this.validateField(field)) {
+				isValid = false;
+			}
+		}
+		return isValid;
+	},
 
-    $password.on('blur', function() {
-      validatePassword();
-    });
+	submitForm(event) {
+		event.preventDefault();
+		if (!this.validateAll()) {
+			this.$nextTick(() => {
+				const firstError = document.querySelector(".input-error");
+				if (firstError) firstError.focus();
+			});
+			return;
+		}
+		event.target.submit();
+	},
 
-    $passwordConfirm.on('blur', function() {
-      validatePasswordConfirm();
-    });
+	hasError(field) {
+		return this.touched[field] && this.errors[field];
+	},
 
-    // Form submit validation
-    $form.on('submit', function(e) {
-      clearErrors();
-      
-      let isValid = true;
+	clearError(field) {
+		this.errors[field] = "";
+	},
 
-      if (!validateUsername()) isValid = false;
-      if (!validateEmail()) isValid = false;
-      if (!validatePassword()) isValid = false;
-      if (!validatePasswordConfirm()) isValid = false;
+	init() {
+		const usernameInput = document.getElementById("username");
+		const emailInput = document.getElementById("email");
 
-      if (!isValid) {
-        e.preventDefault();
-        showMainError('Please fix the errors below');
-        // Focus first error field
-        $form.find('.input-error').first().focus();
-      }
-    });
-
-    function validateUsername() {
-      const value = $username.val().trim();
-      
-      if (!value) {
-        showFieldError($username, 'Username is required');
-        return false;
-      }
-      
-      if (value.length < 3) {
-        showFieldError($username, 'Username must be at least 3 characters');
-        return false;
-      }
-
-      if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-        showFieldError($username, 'Username can only contain letters, numbers and underscores');
-        return false;
-      }
-
-      return true;
-    }
-
-    function validateEmail() {
-      const value = $email.val().trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
-      if (!value) {
-        showFieldError($email, 'Email is required');
-        return false;
-      }
-      
-      if (!emailRegex.test(value)) {
-        showFieldError($email, 'Please enter a valid email address');
-        return false;
-      }
-
-      return true;
-    }
-
-    function validatePassword() {
-      const value = $password.val();
-      
-      if (!value) {
-        showFieldError($password, 'Password is required');
-        return false;
-      }
-      
-      if (value.length < 8) {
-        showFieldError($password, 'Password must be at least 8 characters');
-        return false;
-      }
-
-      // Check password strength
-      const hasLetter = /[a-zA-Z]/.test(value);
-      const hasNumber = /\d/.test(value);
-      
-      if (!hasLetter || !hasNumber) {
-        showFieldError($password, 'Password must contain letters and numbers');
-        return false;
-      }
-
-      return true;
-    }
-
-    function validatePasswordConfirm() {
-      const password = $password.val();
-      const confirm = $passwordConfirm.val();
-      
-      if (!confirm) {
-        showFieldError($passwordConfirm, 'Please confirm your password');
-        return false;
-      }
-      
-      if (password !== confirm) {
-        showFieldError($passwordConfirm, 'Passwords do not match');
-        return false;
-      }
-
-      return true;
-    }
-
-    function showFieldError($field, message) {
-      $field.addClass('input-error');
-      const $formGroup = $field.closest('.form-group');
-      $formGroup.find('.field-error').remove();
-      $formGroup.append('<span class="field-error">' + message + '</span>');
-    }
-
-    function showMainError(message) {
-      // Remove existing main error
-      $container.find('.error.js-error').remove();
-      // Add new error after h1
-      $container.find('h1').after('<div class="error js-error">' + message + '</div>');
-    }
-
-    function clearErrors() {
-      $form.find('.input-error').removeClass('input-error');
-      $form.find('.field-error').remove();
-      $container.find('.error.js-error').remove();
-    }
-
-    // Password strength indicator
-    $password.on('input', function() {
-      const value = $(this).val();
-      const $formGroup = $(this).closest('.form-group');
-      
-      // Remove existing strength indicator
-      $formGroup.find('.password-strength').remove();
-      
-      if (value.length > 0) {
-        const strength = getPasswordStrength(value);
-        $formGroup.append('<div class="password-strength ' + strength.class + '">' + strength.text + '</div>');
-      }
-    });
-
-    function getPasswordStrength(password) {
-      let score = 0;
-      
-      if (password.length >= 8) score++;
-      if (password.length >= 12) score++;
-      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
-      if (/\d/.test(password)) score++;
-      if (/[^a-zA-Z0-9]/.test(password)) score++;
-
-      if (score <= 1) return { class: 'strength-weak', text: 'Weak' };
-      if (score <= 2) return { class: 'strength-fair', text: 'Fair' };
-      if (score <= 3) return { class: 'strength-good', text: 'Good' };
-      return { class: 'strength-strong', text: 'Strong' };
-    }
-  });
-})(jQuery);
+		if (usernameInput?.value) this.form.username = usernameInput.value;
+		if (emailInput?.value) this.form.email = emailInput.value;
+	},
+});

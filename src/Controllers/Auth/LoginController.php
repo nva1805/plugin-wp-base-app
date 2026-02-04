@@ -13,7 +13,8 @@ class LoginController extends BaseController
 
   public function index(): void
   {
-    AuthService::redirectIfAuthenticated('/');
+    $authService = new AuthService();
+    $authService->redirectIfAuthenticated('/');
     if ($this->request->isMethod('POST')) {
       $this->handleLogin();
     }

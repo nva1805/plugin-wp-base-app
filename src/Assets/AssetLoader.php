@@ -16,10 +16,11 @@ class AssetLoader
 
   /**
    * Script dependencies configuration
-   * Format: 'filename.js' => ['dependency1', 'dependency2']
+   * Loading order: register.js → script.js → alpinejs
+   * Components load first, then registry, then Alpine initializes
    */
   private array $scriptDependencies = [
-    'register.js' => ['jquery'],
+    'register.js' => [],
     'login.js' => ['jquery'],
   ];
 
@@ -41,6 +42,7 @@ class AssetLoader
    */
   public function register(): void
   {
+    $this->registerExternalLibraries();
     $this->enqueueAssets(self::TYPE_STYLE);
     $this->enqueueAssets(self::TYPE_SCRIPT);
   }
@@ -99,5 +101,20 @@ class AssetLoader
       : $this->scriptDependencies;
 
     return $config[$filename] ?? [];
+  }
+
+  /**
+   * Register and enqueue external libraries from CDN
+   * Alpine loads LAST after all component scripts
+   */
+  private function registerExternalLibraries(): void
+  {
+    wp_enqueue_script(
+      'alpinejs',
+      'https://cdn.jsdelivr.net/npm/alpinejs@3.15.8/dist/cdn.min.js',
+      [],
+      '3.15.8',
+      ['strategy' => 'defer']
+    );
   }
 }
