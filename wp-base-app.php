@@ -35,6 +35,7 @@ require_once WP_BASE_APP_PATH . 'vendor/autoload.php';
 function run_wp_base_app()
 {
   new WPBaseApp\Plugin();
+  new WPBaseApp\Admin\AdminConfig();
 }
 
 add_action('plugins_loaded', 'run_wp_base_app', 10);

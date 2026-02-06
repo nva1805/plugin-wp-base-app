@@ -1,18 +1,19 @@
 {
-    "name": "yourname/wp-base-app",
-    "description": "A professional WordPress plugin base with modern architecture",
-    "type": "wordpress-plugin",
-    "license": "GPL-2.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "WPBaseApp\\": "src/"
-        }
-    },
-    "require": {
-        "php": ">=7.4",
-        "twig/twig": "^3.22"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.0"
-    }
+	"name": "wp-base-app/plugin-wp-base-app",
+	"description": "Plugin WP Base App for WordPress make by Nguyen Anh",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"psr-4": {
+			"WPBaseApp\\": "src/",
+			"WPBaseApp\\Admin\\": "admin/"
+		}
+	},
+	"require": {
+		"php": ">=7.4",
+		"twig/twig": "^3.22"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^9.0"
+	}
 }
