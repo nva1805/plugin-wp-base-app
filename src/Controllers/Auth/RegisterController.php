@@ -8,10 +8,10 @@ class RegisterController extends BaseController
 {
   public function __construct(string $template)
   {
-    parent::__construct($template, $this->getInitialData());
+    parent::__construct($template);
   }
 
-  public function index(): void
+  public function handle(): void
   {
     $authService = new AuthService();
     $authService->redirectIfAuthenticated();
@@ -19,18 +19,20 @@ class RegisterController extends BaseController
     if ($this->request->isMethod('POST')) {
       $this->handleRegistration();
     }
+    $this->render($this->getInitialData());
   }
 
-  private function getInitialData()
+  private function getInitialData(): array
   {
     return [
       'site_name' => get_bloginfo('name'),
       'register_nonce' => wp_create_nonce('wp-base-app-register'),
-      'error' => null,
-      'success' => null,
+      'error' => $this->getData('error'),
+      'errors' => $this->getData('errors', []),
+      'success' => $this->getData('success'),
       'login_url' => site_url('/login'),
-      'username' => '',
-      'email' => '',
+      'username' => $this->getData('username', ''),
+      'email' => $this->getData('email', ''),
     ];
   }
 
@@ -46,13 +48,10 @@ class RegisterController extends BaseController
     $password = $this->request->input('password', '');
     $password_confirm = $this->request->input('password_confirm', '');
 
-    // Preserve form data
     $this->mergeData([
       'username' => $username,
       'email' => $email,
     ]);
-
-    // Validate input
     $errors = $this->validate($username, $email, $password, $password_confirm);
 
     if (!empty($errors)) {
@@ -63,7 +62,6 @@ class RegisterController extends BaseController
       return;
     }
 
-    // Create user
     $user_id = wp_create_user($username, $password, $email);
 
     if (is_wp_error($user_id)) {
@@ -71,19 +69,10 @@ class RegisterController extends BaseController
       return;
     }
 
-    $this->redirect(wp_login_url());
+    $this->redirect(site_url('/login'));
   }
 
-  /**
-   * Validate registration input
-   *
-   * @param string $username
-   * @param string $email
-   * @param string $password
-   * @param string $password_confirm
-   * @return array Array of error messages, empty if valid
-   */
-  private function validate($username, $email, $password, $password_confirm)
+  private function validate(string $username, string $email, string $password, string $password_confirm): array
   {
     $errors = [];
 
@@ -98,16 +87,7 @@ class RegisterController extends BaseController
     return $errors;
   }
 
-  /**
-   * Get validation rules mapping
-   *
-   * @param string $username
-   * @param string $email
-   * @param string $password
-   * @param string $password_confirm
-   * @return array
-   */
-  private function getValidationRules($username, $email, $password, $password_confirm)
+  private function getValidationRules(string $username, string $email, string $password, string $password_confirm): array
   {
     return [
       // Username rules

@@ -10,21 +10,18 @@ abstract class BaseController
   protected array $data = [];
   protected Request $request;
 
-  public function __construct(string $template, array $data = [])
+  public function __construct(string $template)
   {
     $this->template = $template;
-    $this->data = $data;
     $this->request = new Request();
   }
 
-  /**
-   * Handle the request for each controller
-   */
-  abstract public function index(): void;
-
-  public function render(): void
+  abstract public function handle(): void;
+  protected function render(array $data = []): void
   {
+    $this->data = array_merge($this->data, $data);
     echo Twig::renderTemplate($this->template, $this->data);
+    exit;
   }
 
   protected function setData(string $key, mixed $value): self

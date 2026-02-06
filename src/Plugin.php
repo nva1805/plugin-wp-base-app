@@ -16,6 +16,7 @@ class Plugin
     add_filter('query_vars', fn($vars) => array_merge($vars, ['wp_base_app_page']));
     add_filter('template_include', [$this, 'dispatch']);
     add_action('wp_enqueue_scripts', [$this->assetLoader, 'register']);
+    add_filter('show_admin_bar', fn($show) => current_user_can('administrator') ? $show : false);
   }
 
   /**
@@ -37,9 +38,6 @@ class Plugin
     }
 
     $controller = new $controllerClass($page['template']);
-    $controller->index();
-
-    echo $controller->render();
-    exit;
+    $controller->handle();
   }
 }

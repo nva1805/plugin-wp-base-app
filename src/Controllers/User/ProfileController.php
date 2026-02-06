@@ -2,39 +2,28 @@
 namespace WPBaseApp\Controllers\User;
 
 use WPBaseApp\Controllers\BaseController;
+use WPBaseApp\Services\AuthService;
 
 class ProfileController extends BaseController
 {
-  private $user_id;
-  
-  public function __construct($template)
+  private int $user_id;
+
+  public function __construct(string $template)
   {
-    // Lấy user_id từ URL hoặc current user
-    $this->user_id = get_query_var('user_id') ?: get_current_user_id();
-    
-    // Chuẩn bị data động
-    $data = $this->prepareData();
-    
-    parent::__construct($template, $data);
+    parent::__construct($template);
   }
 
-  public function index(): void
+  public function handle(): void
   {
-    // Có thể thêm logic xử lý ở đây nếu cần
-  }
-  
-  /**
-   * ✅ XỬ LÝ DATA ĐỘNG - Query Database, API, etc
-   */
-  private function prepareData()
-  {
-    // Lấy user data
+    $authService = new AuthService();
+    $authService->redirectIfGuest(home_url('/login'), 'profile');
+    $this->user_id = (int) (get_query_var('user_id') ?: get_current_user_id());
     $user = get_userdata($this->user_id);
-    
-    if (!$user) {
-      wp_die('User not found');
-    }
+    $this->render($this->prepareData($user));
+  }
 
+  private function prepareData(\WP_User $user): array
+  {
     return [
       // User info
       'user' => [
@@ -45,22 +34,22 @@ class ProfileController extends BaseController
         'avatar' => get_avatar_url($user->ID),
         'registered' => $user->user_registered,
       ],
-      
+
       // User meta data
       'bio' => get_user_meta($this->user_id, 'description', true),
       'social_links' => $this->getSocialLinks(),
-      
+
       // User posts
       'posts' => $this->getUserPosts(),
       'post_count' => count_user_posts($this->user_id),
-      
+
       // User comments
       'comments' => $this->getUserComments(),
-      
+
       // Permissions
       'can_edit' => current_user_can('edit_user', $this->user_id),
       'is_own_profile' => get_current_user_id() === $this->user_id,
-      
+
       // Statistics
       'stats' => $this->getUserStats(),
     ];
@@ -69,20 +58,29 @@ class ProfileController extends BaseController
   /**
    * Lấy posts của user từ database
    */
-  private function getUserPosts()
+  private function getUserPosts(): array
   {
-    return get_posts([
+    $posts = get_posts([
       'author' => $this->user_id,
       'posts_per_page' => 10,
       'orderby' => 'date',
       'order' => 'DESC',
     ]);
+
+    return array_map(function ($post) {
+      return [
+        'id' => $post->ID,
+        'title' => $post->post_title,
+        'date' => $post->post_date,
+        'permalink' => get_permalink($post->ID),
+      ];
+    }, $posts);
   }
 
   /**
    * Lấy comments của user
    */
-  private function getUserComments()
+  private function getUserComments(): array
   {
     return get_comments([
       'user_id' => $this->user_id,
@@ -94,7 +92,7 @@ class ProfileController extends BaseController
   /**
    * Lấy social links từ user meta
    */
-  private function getSocialLinks()
+  private function getSocialLinks(): array
   {
     return [
       'facebook' => get_user_meta($this->user_id, 'facebook', true),
@@ -106,10 +104,10 @@ class ProfileController extends BaseController
   /**
    * Tính toán statistics động
    */
-  private function getUserStats()
+  private function getUserStats(): array
   {
     global $wpdb;
-    
+
     return [
       'total_posts' => count_user_posts($this->user_id),
       'total_comments' => $wpdb->get_var($wpdb->prepare(
@@ -120,11 +118,11 @@ class ProfileController extends BaseController
     ];
   }
 
-  private function getMemberSinceDays()
+  private function getMemberSinceDays(): int
   {
     $user = get_userdata($this->user_id);
     $registered = strtotime($user->user_registered);
     $now = current_time('timestamp');
-    return floor(($now - $registered) / DAY_IN_SECONDS);
+    return (int) floor(($now - $registered) / DAY_IN_SECONDS);
   }
 }

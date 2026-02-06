@@ -8,34 +8,37 @@ class LoginController extends BaseController
 {
   public function __construct(string $template)
   {
-    parent::__construct($template, $this->getInitialData());
+    parent::__construct($template);
   }
 
-  public function index(): void
+  public function handle(): void
   {
     $authService = new AuthService();
     $authService->redirectIfAuthenticated('/');
+
     if ($this->request->isMethod('POST')) {
       $this->handleLogin();
     }
+
+    $this->render($this->getInitialData());
   }
 
-  private function getInitialData()
+  private function getInitialData(): array
   {
     return [
       'site_name' => get_bloginfo('name'),
       'destination' => $_GET['destination'] ?? home_url(),
       'login_nonce' => wp_create_nonce('wp-base-app-login'),
-      'error' => null,
+      'error' => $this->getData('error'),
       'register_url' => site_url('/register'),
       'lost_password_url' => wp_lostpassword_url(),
     ];
   }
 
-  private function handleLogin()
+  private function handleLogin(): void
   {
     if (!$this->request->has('login_nonce') || !wp_verify_nonce($this->request->input('login_nonce'), 'wp-base-app-login')) {
-      $this->data['error'] = 'Invalid security token';
+      $this->setData('error', 'Invalid security token');
       return;
     }
 
@@ -45,7 +48,7 @@ class LoginController extends BaseController
 
     // Validate input
     if (empty($username) || empty($password)) {
-      $this->data['error'] = 'Please enter both username and password';
+      $this->setData('error', 'Please enter both username and password');
       return;
     }
 
@@ -62,6 +65,7 @@ class LoginController extends BaseController
       return;
     }
 
+    // Login thành công -> redirect
     $destination = $this->request->input('destination', home_url());
     $this->redirect($destination);
   }

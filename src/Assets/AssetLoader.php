@@ -33,6 +33,7 @@ class AssetLoader
     'components.css' => ['wp-base-app-base.css'],
     'login.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
     'register.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
+    'profile.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
   ];
 
   public function __construct(string $basePath, string $baseUrl, string $prefix = 'wp-base-app')
