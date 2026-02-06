@@ -16,19 +16,24 @@ class AssetLoader
 
   /**
    * Script dependencies configuration
-   * Loading order: register.js → script.js → alpinejs
-   * Components load first, then registry, then Alpine initializes
+   * Loading order: form-validator.js → login.js/register.js → alpinejs
+   * Base validator loads first, then specific forms, then Alpine initializes
    */
   private array $scriptDependencies = [
-    'register.js' => [],
-    'login.js' => ['jquery'],
+    'form-validator.js' => [],
+    'login.js' => ['wp-base-app-form-validator.js'],
+    'register.js' => ['wp-base-app-form-validator.js'],
   ];
 
   /**
    * Style dependencies configuration
    * Format: 'filename.css' => ['dependency1', 'dependency2']
    */
-  private array $styleDependencies = [];
+  private array $styleDependencies = [
+    'components.css' => ['wp-base-app-base.css'],
+    'login.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
+    'register.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
+  ];
 
   public function __construct(string $basePath, string $baseUrl, string $prefix = 'wp-base-app')
   {

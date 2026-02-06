@@ -5,80 +5,82 @@
 {% endblock %}
 
 {% block content %}
-	<div
-		class="register-page">
-		{# Left Side - Branding #}
-		<div class="register-branding">
-			<div class="branding-content">
-				<h1>Create Account</h1>
-				<p class="tagline">Join us today and get started</p>
+	<div class="register-page">
+		<div
+			class="register-wrapper">
+			{# Left Side - Branding (integrated into card) #}
+			<div class="register-branding">
+				<div class="branding-content">
+					<h1>Create Account</h1>
+					<p class="tagline">Join us today and get started</p>
 
-				<ul class="features">
-					<li>
-						<span class="feature-icon">✓</span>
-						<span>Free to join, no credit card required</span>
-					</li>
-					<li>
-						<span class="feature-icon">✓</span>
-						<span>Access to exclusive content</span>
-					</li>
-					<li>
-						<span class="feature-icon">✓</span>
-						<span>24/7 customer support</span>
-					</li>
-				</ul>
+					<ul class="features">
+						<li>
+							<span class="feature-icon">✓</span>
+							<span>Free to join, no credit card required</span>
+						</li>
+						<li>
+							<span class="feature-icon">✓</span>
+							<span>Access to exclusive content</span>
+						</li>
+						<li>
+							<span class="feature-icon">✓</span>
+							<span>24/7 customer support</span>
+						</li>
+					</ul>
+				</div>
 			</div>
-		</div>
 
-		{# Right Side - Form #}
-		<div class="register-form-wrapper">
-			<div class="register-container" x-data="registerForm">
-				<h2>Sign Up</h2>
+			{# Right Side - Form #}
+			<div class="register-form-wrapper">
+				<div class="register-container" x-data="registerForm">
+					<h2>Sign Up</h2>
 
-				{# Server-side messages #}
-				{% if error %}
-					<div class="message error" role="alert">{{ error|striptags }}</div>
-				{% endif %}
+					{# Server-side messages #}
+					{% if error %}
+						<div class="message error" role="alert">{{ error|striptags }}</div>
+					{% endif %}
 
-				{% if success %}
-					<div class="message success" role="status">{{ success }}</div>
-				{% endif %}
+					{% if success %}
+						<div class="message success" role="status">{{ success }}</div>
+					{% endif %}
 
-				<form method="POST" action="" @submit="submitForm($event)" novalidate>
-					<input type="hidden" name="register_nonce" value="{{ register_nonce }}">
+					<form method="POST" action="" @submit="submitForm($event)" novalidate>
+						<input type="hidden" name="register_nonce" value="{{ register_nonce }}">
 
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input type="text" id="username" name="username" x-model="form.username" @blur="validateField('username')" @focus="clearError('username')" :class="{ 'input-error': hasError('username') }" placeholder="Enter username" autofocus autocomplete="username">
-						<span class="field-error" x-show="hasError('username')" x-text="errors.username"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" x-model="form.email" @blur="validateField('email')" @focus="clearError('email')" :class="{ 'input-error': hasError('email') }" placeholder="you@example.com" autocomplete="email">
-						<span class="field-error" x-show="hasError('email')" x-text="errors.email"></span>
-					</div>
-
-					<div class="form-row">
 						<div class="form-group">
-							<label for="password">Password</label>
-							<input type="password" id="password" name="password" x-model="form.password" @blur="validateField('password')" @focus="clearError('password')" :class="{ 'input-error': hasError('password') }" placeholder="••••••••" autocomplete="new-password">
-							<span class="field-error" x-show="hasError('password')" x-text="errors.password"></span>
+							<label for="username">Username</label>
+							<input type="text" id="username" name="username" x-model="form.username" @blur="validateField('username')" @focus="clearError('username')" :class="{ 'input-error': hasError('username') }" placeholder="Enter username" autofocus autocomplete="username">
+							<span class="field-error" x-show="hasError('username')" x-text="errors.username"></span>
 						</div>
 
 						<div class="form-group">
-							<label for="password_confirm">Confirm</label>
-							<input type="password" id="password_confirm" name="password_confirm" x-model="form.password_confirm" @blur="validateField('password_confirm')" @focus="clearError('password_confirm')" :class="{ 'input-error': hasError('password_confirm') }" placeholder="••••••••" autocomplete="new-password">
-							<span class="field-error" x-show="hasError('password_confirm')" x-text="errors.password_confirm"></span>
+							<label for="email">Email</label>
+							<input type="email" id="email" name="email" x-model="form.email" @blur="validateField('email')" @focus="clearError('email')" :class="{ 'input-error': hasError('email') }" placeholder="you@example.com" autocomplete="email">
+							<span class="field-error" x-show="hasError('email')" x-text="errors.email"></span>
 						</div>
+
+						<div class="form-row">
+							<div class="form-group">
+								<label for="password">Password</label>
+								<input type="password" id="password" name="password" x-model="form.password" @blur="validateField('password')" @focus="clearError('password')" :class="{ 'input-error': hasError('password') }" placeholder="••••••••" autocomplete="new-password">
+								<span class="field-error" x-show="hasError('password')" x-text="errors.password"></span>
+							</div>
+
+							<div class="form-group">
+								<label for="password_confirm">Confirm</label>
+								<input type="password" id="password_confirm" name="password_confirm" x-model="form.password_confirm" @blur="validateField('password_confirm')" @focus="clearError('password_confirm')" :class="{ 'input-error': hasError('password_confirm') }" placeholder="••••••••" autocomplete="new-password">
+								<span class="field-error" x-show="hasError('password_confirm')" x-text="errors.password_confirm"></span>
+							</div>
+						</div>
+
+						<button type="submit" class="btn-submit">Create Account</button>
+					</form>
+
+					<div class="links">
+						<span>Already have an account?</span>
+						<a href="{{ login_url }}">Sign in</a>
 					</div>
-
-					<button type="submit" class="btn-submit">Create Account</button>
-				</form>
-
-				<div class="links">
-					<span>Already have an account?</span>
-					<a href="{{ login_url }}">Sign in</a>
 				</div>
 			</div>
 		</div>

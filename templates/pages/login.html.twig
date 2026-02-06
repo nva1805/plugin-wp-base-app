@@ -1,42 +1,69 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title %}Login - {{ get_bloginfo('name') }}{% endblock %}
+{% block title %}Login -
+	{{ get_bloginfo('name') }}
+{% endblock %}
 
 {% block content %}
 	<div class="login-page">
-		<div class="login-container">
-			<h1>Login to {{ get_bloginfo('name') }}</h1>
+		<div
+			class="login-wrapper">
+			{# Decorative Side Panel (integrated, not separated) #}
+			<div class="login-decoration">
+				<div class="decoration-content">
+					<div class="decoration-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/>
+						</svg>
+					</div>
+					<h2>Welcome Back</h2>
+					<p>Sign in to continue to your account</p>
+				</div>
+			</div>
 
-			{% if error %}
-				<div class="error">{{ error|striptags }}</div>
-			{% endif %}
-
-			<form method="POST" action="">
-				<input type="hidden" name="login_nonce" value="{{ login_nonce }}">
-				<input type="hidden" name="destination" value="{{ destination }}">
-
-				<div class="form-group">
-					<label for="username">Username or Email</label>
-					<input type="text" id="username" name="username" required autofocus>
+			{# Login Form Container #}
+			<div class="login-container" x-data="loginForm">
+				<div class="login-header">
+					<h1>Sign In</h1>
+					<p class="login-subtitle">Enter your credentials to access your account</p>
 				</div>
 
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" id="password" name="password" required>
+				{# Server-side messages #}
+				{% if error %}
+					<div class="message error" role="alert">{{ error|striptags }}</div>
+				{% endif %}
+
+				<form method="POST" action="" @submit="submitForm($event)" novalidate>
+					<input type="hidden" name="login_nonce" value="{{ login_nonce }}">
+					<input type="hidden" name="destination" value="{{ destination }}">
+
+					<div class="form-group">
+						<label for="username">Username or Email</label>
+						<input type="text" id="username" name="username" x-model="form.username" @blur="validateField('username')" @focus="clearError('username')" :class="{ 'input-error': hasError('username') }" placeholder="Enter your username or email" autofocus autocomplete="username">
+						<span class="field-error" x-show="hasError('username')" x-text="errors.username"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" id="password" name="password" x-model="form.password" @blur="validateField('password')" @focus="clearError('password')" :class="{ 'input-error': hasError('password') }" placeholder="••••••••" autocomplete="current-password">
+						<span class="field-error" x-show="hasError('password')" x-text="errors.password"></span>
+					</div>
+
+					<div class="form-options">
+						<div class="form-check">
+							<input type="checkbox" id="remember" name="remember" value="1" x-model="form.remember">
+							<label for="remember">Remember me</label>
+						</div>
+						<a href="{{ lost_password_url }}" class="forgot-link">Forgot password?</a>
+					</div>
+
+					<button type="submit" class="btn-submit">Sign In</button>
+				</form>
+
+				<div class="links">
+					<span>Don't have an account?</span>
+					<a href="{{ register_url }}">Create one</a>
 				</div>
-
-				<div class="remember-me">
-					<input type="checkbox" id="remember" name="remember" value="1">
-					<label for="remember" style="margin-bottom: 0; font-weight: normal;">Remember Me</label>
-				</div>
-
-				<button type="submit">Login</button>
-			</form>
-
-			<div class="links">
-				<a href="{{ lost_password_url }}">Lost your password?</a>
-				|
-				<a href="{{ register_url }}">Register</a>
 			</div>
 		</div>
 	</div>
