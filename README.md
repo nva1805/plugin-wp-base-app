@@ -1,6 +1,6 @@
 # WP Base App
 
-A professional WordPress plugin starter with modern architecture and best practices.
+wordpress plugin base app with config page include login, register, profile page
 
 ## Installation
 

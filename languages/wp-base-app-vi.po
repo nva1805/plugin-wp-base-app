@@ -1,0 +1,189 @@
+# Vietnamese Translation for WP Base App
+# Copyright (C) 2026 Nguyen Anh
+# This file is distributed under the GPL-2.0-or-later.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Base App 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-06 17:00+0700\n"
+"PO-Revision-Date: 2026-02-06 17:00+0700\n"
+"Last-Translator: Nguyen Anh\n"
+"Language-Team: Vietnamese\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: templates/pages/login.html.twig:19
+msgid "Welcome Back"
+msgstr "Chào mừng trở lại"
+
+#: templates/pages/login.html.twig:20
+msgid "Sign in to continue to your account"
+msgstr "Đăng nhập để tiếp tục sử dụng tài khoản"
+
+#: templates/pages/login.html.twig:27 templates/pages/login.html.twig:60
+msgid "Sign In"
+msgstr "Đăng nhập"
+
+#: templates/pages/login.html.twig:28
+msgid "Enter your credentials to access your account"
+msgstr "Nhập thông tin đăng nhập để truy cập tài khoản"
+
+#: templates/pages/login.html.twig:41
+msgid "Username or Email"
+msgstr "Tên đăng nhập hoặc Email"
+
+#: templates/pages/login.html.twig:42
+msgid "Enter your username or email"
+msgstr "Nhập tên đăng nhập hoặc email"
+
+#: templates/pages/login.html.twig:47
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: templates/pages/login.html.twig:55
+msgid "Remember me"
+msgstr "Ghi nhớ đăng nhập"
+
+#: templates/pages/login.html.twig:57
+msgid "Forgot password?"
+msgstr "Quên mật khẩu?"
+
+#: templates/pages/login.html.twig:64
+msgid "Don't have an account?"
+msgstr "Chưa có tài khoản?"
+
+#: templates/pages/login.html.twig:65
+msgid "Create one"
+msgstr "Tạo ngay"
+
+#: templates/pages/register.html.twig
+msgid "Create Account"
+msgstr "Tạo tài khoản"
+
+#: templates/pages/register.html.twig
+msgid "Join us today"
+msgstr "Tham gia ngay hôm nay"
+
+#: templates/pages/register.html.twig
+msgid "Sign Up"
+msgstr "Đăng ký"
+
+#: templates/pages/register.html.twig
+msgid "Fill in your details to create your account"
+msgstr "Điền thông tin để tạo tài khoản"
+
+#: templates/pages/register.html.twig
+msgid "Username"
+msgstr "Tên đăng nhập"
+
+#: templates/pages/register.html.twig
+msgid "Email"
+msgstr "Email"
+
+#: templates/pages/register.html.twig
+msgid "Confirm Password"
+msgstr "Xác nhận mật khẩu"
+
+#: templates/pages/register.html.twig
+msgid "Already have an account?"
+msgstr "Đã có tài khoản?"
+
+#: templates/pages/register.html.twig
+msgid "Sign in"
+msgstr "Đăng nhập"
+
+#: templates/pages/profile.html.twig
+msgid "Edit Profile"
+msgstr "Chỉnh sửa hồ sơ"
+
+#: templates/pages/profile.html.twig
+msgid "Posts"
+msgstr "Bài viết"
+
+#: templates/pages/profile.html.twig
+msgid "Comments"
+msgstr "Bình luận"
+
+#: templates/pages/profile.html.twig
+msgid "Days as Member"
+msgstr "Ngày làm thành viên"
+
+#: templates/pages/profile.html.twig
+msgid "Connect"
+msgstr "Kết nối"
+
+#: templates/pages/profile.html.twig
+msgid "Recent Posts"
+msgstr "Bài viết gần đây"
+
+#: templates/pages/profile.html.twig
+msgid "Recent Comments"
+msgstr "Bình luận gần đây"
+
+#: templates/pages/profile.html.twig
+msgid "Account Information"
+msgstr "Thông tin tài khoản"
+
+#: templates/pages/profile.html.twig
+msgid "Member Since"
+msgstr "Thành viên từ"
+
+#: src/Controllers/Auth/LoginController.php
+msgid "Invalid security token"
+msgstr "Mã bảo mật không hợp lệ"
+
+#: src/Controllers/Auth/LoginController.php
+msgid "Please enter both username and password"
+msgstr "Vui lòng nhập cả tên đăng nhập và mật khẩu"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Username is required"
+msgstr "Tên đăng nhập là bắt buộc"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Username must be at least 3 characters"
+msgstr "Tên đăng nhập phải có ít nhất 3 ký tự"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Username can only contain letters, numbers and underscores"
+msgstr "Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Username already exists"
+msgstr "Tên đăng nhập đã tồn tại"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Email is required"
+msgstr "Email là bắt buộc"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Invalid email address"
+msgstr "Địa chỉ email không hợp lệ"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Email already exists"
+msgstr "Email đã tồn tại"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Password is required"
+msgstr "Mật khẩu là bắt buộc"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Password must be at least 8 characters"
+msgstr "Mật khẩu phải có ít nhất 8 ký tự"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Password must contain letters and numbers"
+msgstr "Mật khẩu phải chứa cả chữ cái và số"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Please confirm your password"
+msgstr "Vui lòng xác nhận mật khẩu"
+
+#: src/Controllers/Auth/RegisterController.php
+msgid "Passwords do not match"
+msgstr "Mật khẩu không khớp"

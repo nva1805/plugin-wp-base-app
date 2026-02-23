@@ -70,6 +70,10 @@ class Twig
       'date' => 'date_i18n',
     ];
 
+    $twig->addFilter(new \Twig\TwigFilter('t', function ($text) {
+      return __($text, 'wp-base-app');
+    }));
+
     foreach ($filters as $twigName => $wpFunction) {
       if (is_numeric($twigName)) {
         $twigName = $wpFunction;
