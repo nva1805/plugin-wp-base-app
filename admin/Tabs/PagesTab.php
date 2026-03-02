@@ -36,7 +36,6 @@ class PagesTab implements TabInterface
   {
     register_setting(self::GROUP_NAME, self::OPTION_NAME, [
       'sanitize_callback' => [$this, 'sanitize'],
-      'default' => ['login', 'register'],
     ]);
   }
 
