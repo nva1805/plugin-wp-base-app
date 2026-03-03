@@ -2,7 +2,6 @@
 namespace WPBaseApp\Controllers\User;
 
 use WPBaseApp\Controllers\BaseController;
-use WPBaseApp\Services\AuthService;
 
 class ProfileController extends BaseController
 {
@@ -15,8 +14,6 @@ class ProfileController extends BaseController
 
   public function handle(): void
   {
-    $authService = new AuthService();
-    $authService->redirectIfGuest(home_url('/login'), 'profile');
     $this->user_id = (int) (get_query_var('user_id') ?: get_current_user_id());
     $user = get_userdata($this->user_id);
     $this->render($this->prepareData($user));

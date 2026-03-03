@@ -1,6 +1,6 @@
 <?php
 
-namespace WPBaseApp\Assets;
+namespace WPBaseApp\Support;
 
 /**
  * Asset Loader - Handles registration and enqueueing of plugin assets
@@ -36,6 +36,18 @@ class AssetLoader
     'profile.css' => ['wp-base-app-base.css', 'wp-base-app-components.css'],
   ];
 
+  /**
+   * Page-specific assets: only load when on matching page
+   * Assets NOT listed here are treated as global and always loaded
+   */
+  private array $pageAssets = [
+    'login.css' => 'login',
+    'login.js' => 'login',
+    'register.css' => 'register',
+    'register.js' => 'register',
+    'profile.css' => 'profile',
+  ];
+
   public function __construct(string $basePath, string $baseUrl, string $prefix = 'wp-base-app')
   {
     $this->basePath = rtrim($basePath, '/');
@@ -51,6 +63,7 @@ class AssetLoader
     $this->registerExternalLibraries();
     $this->enqueueAssets(self::TYPE_STYLE);
     $this->enqueueAssets(self::TYPE_SCRIPT);
+    $this->localizeScripts();
   }
 
   /**
@@ -61,6 +74,10 @@ class AssetLoader
     $files = $this->getFiles($type);
 
     foreach ($files as $filename) {
+      if (!$this->shouldEnqueue($filename)) {
+        continue;
+      }
+
       $url = $this->buildAssetUrl($type, $filename);
       $dependencies = $this->getDependencies($type, $filename);
       if ($type === self::TYPE_STYLE) {
@@ -69,6 +86,21 @@ class AssetLoader
         wp_enqueue_script($this->prefix . '-' . $filename, $url, $dependencies, WP_BASE_APP_VERSION, true);
       }
     }
+  }
+
+  /**
+   * Determine if an asset should be enqueued on the current page
+   */
+  private function shouldEnqueue(string $filename): bool
+  {
+    $slug = get_query_var('wp_base_app_page');
+
+    // Global assets always load
+    if (!isset($this->pageAssets[$filename])) {
+      return true;
+    }
+
+    return $slug === $this->pageAssets[$filename];
   }
 
   /**
@@ -122,5 +154,18 @@ class AssetLoader
       '3.15.8',
       ['strategy' => 'defer']
     );
+  }
+
+  /**
+   * Pass PHP config to JS
+   */
+  private function localizeScripts(): void
+  {
+    wp_localize_script($this->prefix . '-script', 'wpBaseApp', [
+      'siteUrl' => site_url(),
+      'ajaxUrl' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('wp_rest'),
+      'isLoggedIn' => is_user_logged_in(),
+    ]);
   }
 }

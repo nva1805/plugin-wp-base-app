@@ -1,8 +1,8 @@
 <?php
 namespace WPBaseApp;
 
-use WPBaseApp\Assets\AssetLoader;
-use WPBaseApp\Services\AppPageManager;
+use WPBaseApp\Support\AssetLoader;
+use WPBaseApp\Support\AppPageManager;
 
 class Plugin
 {
@@ -14,7 +14,6 @@ class Plugin
     $allPages = AppPageManager::getVirtualPages();
     $enabledKeys = AppPageManager::getEnabledPages();
 
-    // Only keep enabled virtual pages
     $this->virtualPages = array_filter(
       $allPages,
       fn($key) => in_array($key, $enabledKeys),
@@ -36,9 +35,6 @@ class Plugin
     load_plugin_textdomain('wp-base-app', false, 'plugin-wp-base-app/languages');
   }
 
-  /**
-   * Dispatch the route to controller
-   */
   public function dispatch($template)
   {
     $slug = get_query_var('wp_base_app_page');
@@ -48,6 +44,9 @@ class Plugin
     }
 
     $page = $this->virtualPages[$slug];
+
+    $this->checkAuth($page['auth'] ?? null, $slug);
+
     $controllerClass = $page['controller'];
 
     if (!class_exists($controllerClass)) {
@@ -56,5 +55,18 @@ class Plugin
 
     $controller = new $controllerClass($page['template']);
     $controller->handle();
+  }
+
+  private function checkAuth(?string $auth, string $currentSlug): void
+  {
+    if ($auth === 'authenticated' && !is_user_logged_in()) {
+      wp_safe_redirect(home_url('/login?destination=' . urlencode($currentSlug)));
+      exit;
+    }
+
+    if ($auth === 'guest' && is_user_logged_in()) {
+      wp_safe_redirect(home_url('/'));
+      exit;
+    }
   }
 }

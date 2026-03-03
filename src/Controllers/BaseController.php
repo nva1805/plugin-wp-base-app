@@ -2,7 +2,7 @@
 namespace WPBaseApp\Controllers;
 
 use WPBaseApp\View\Twig;
-use WPBaseApp\Http\Request;
+use WPBaseApp\Support\Request;
 
 abstract class BaseController
 {

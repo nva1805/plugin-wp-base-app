@@ -1,6 +1,6 @@
 <?php
 
-namespace WPBaseApp\Services;
+namespace WPBaseApp\Support;
 
 use WPBaseApp\Admin\AdminConfig;
 
@@ -13,7 +13,7 @@ class AppPageManager
 
   public static function getEnabledPages(): array
   {
-    $option = get_option('wpba_enabled_pages', null);
+    $option = AppConfig::get('enabled_pages');
     if ($option === null) {
       return ['login', 'register']; // default enabled pages
     }

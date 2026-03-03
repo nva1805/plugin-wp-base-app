@@ -4,7 +4,7 @@ namespace WPBaseApp\Admin;
 
 use WPBaseApp\Admin\Tabs\PagesTab;
 use WPBaseApp\Admin\Tabs\TabInterface;
-use WPBaseApp\Services\AppPageManager;
+use WPBaseApp\Support\AppPageManager;
 
 class AdminConfig
 {

@@ -1,5 +1,5 @@
 <?php
-namespace WPBaseApp\Http;
+namespace WPBaseApp\Support;
 
 /**
  * Request: handler HTTP requests

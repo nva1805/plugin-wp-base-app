@@ -2,7 +2,7 @@
 
 namespace WPBaseApp\Admin\Tabs;
 
-use WPBaseApp\Services\AppPageManager;
+use WPBaseApp\Support\AppPageManager;
 
 class PagesTab implements TabInterface
 {

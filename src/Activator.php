@@ -2,7 +2,7 @@
 
 namespace WPBaseApp;
 
-use WPBaseApp\Services\AppPageManager;
+use WPBaseApp\Support\AppPageManager;
 
 class Activator
 {
